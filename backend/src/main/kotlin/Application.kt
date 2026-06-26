@@ -41,7 +41,13 @@ import java.io.File
 fun main() {
 	val dataFile = File(System.getenv("PLACES_JSON_PATH") ?: "../data/places.json")
 	val repository = PlaceRepository(dataFile)
-	repository.load()
+
+	try {
+		repository.load()
+	} catch (e: Exception) {
+		println("Error loading data: ${e.message}")
+		return
+	}
 
 	embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
 		module(repository)

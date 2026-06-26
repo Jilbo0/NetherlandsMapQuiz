@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plaatsen — Dutch places quiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <style>
+        :root {
+            --paper: #F3EEE2;
+            --paper-deep: #E8E0CC;
+            --ink: #2B3A4A;
+            --ink-soft: #5C6B78;
+            --line: #C9BFA4;
+            --accent: #C1572D;
+            --accent-deep: #99431F;
+            --good: #4C7A52;
+            --font-display: 'Georgia', 'Times New Roman', serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: var(--font-body);
+            background-image:
+                    radial-gradient(circle at 20% 30%, rgba(43,58,74,0.03) 0, transparent 45%),
+                    radial-gradient(circle at 80% 70%, rgba(43,58,74,0.03) 0, transparent 45%);
+        }
+
+        .app {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 28px 20px 60px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 2px solid var(--ink);
+            padding-bottom: 14px;
+            margin-bottom: 22px;
+        }
+
+        header h1 {
+            font-family: var(--font-display);
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        header h1 .sub {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--ink-soft);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .mode-switch {
+            display: flex;
+            gap: 0;
+            border: 1.5px solid var(--ink);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .mode-switch button {
+            border: none;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 9px 16px;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .mode-switch button + button {
+            border-left: 1.5px solid var(--ink);
+        }
+
+        .mode-switch button.active {
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 20px;
+        }
+
+        @media (max-width: 800px) {
+            .layout { grid-template-columns: 1fr; }
+        }
+
+        .map-card {
+            border: 1.5px solid var(--ink);
+            border-radius: 10px;
+            overflow: hidden;
+            background: #DCE4DA;
+            position: relative;
+        }
+
+        #map {
+            height: 620px;
+            width: 100%;
+            background: #DCE4DA;
+        }
+
+        .leaflet-container {
+            font-family: var(--font-body);
+        }
+
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .panel-card {
+            border: 1.5px solid var(--ink);
+            border-radius: 10px;
+            background: var(--paper-deep);
+            padding: 18px 20px;
+        }
+
+        .panel-card .eyebrow {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--ink-soft);
+            font-weight: 700;
+            margin: 0 0 8px;
+        }
+
+        .prompt-name {
+            font-family: var(--font-display);
+            font-size: 26px;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.25;
+        }
+
+        .prompt-province {
+            margin: 6px 0 0;
+            font-size: 13px;
+            color: var(--ink-soft);
+        }
+
+        .name-input-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .name-input-row input {
+            flex: 1;
+            font-size: 16px;
+            padding: 10px 12px;
+            border: 1.5px solid var(--ink);
+            border-radius: 6px;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: var(--font-body);
+        }
+
+        .name-input-row input:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 1px;
+        }
+
+        button.primary {
+            border: 1.5px solid var(--ink);
+            background: var(--ink);
+            color: var(--paper);
+            font-weight: 700;
+            font-size: 14px;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            transition: opacity 0.15s;
+        }
+
+        button.primary:hover { opacity: 0.85; }
+        button.primary:disabled { opacity: 0.4; cursor: default; }
+
+        .feedback {
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .feedback.show { display: block; }
+
+        .feedback.correct {
+            background: rgba(76,122,82,0.12);
+            border: 1px solid var(--good);
+            color: #2E4F32;
+        }
+
+        .feedback.close {
+            background: rgba(193,87,45,0.10);
+            border: 1px solid var(--accent);
+            color: var(--accent-deep);
+        }
+
+        .feedback.wrong {
+            background: rgba(43,58,74,0.06);
+            border: 1px solid var(--line);
+            color: var(--ink);
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-top: 4px;
+        }
+
+        .score-row .big {
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .score-row .label {
+            font-size: 12px;
+            color: var(--ink-soft);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--ink-soft);
+        }
+
+        .stats strong {
+            color: var(--ink);
+            font-size: 16px;
+            display: block;
+            font-family: var(--font-display);
+        }
+
+        .next-row {
+            margin-top: 14px;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: var(--ink-soft);
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        #status-banner {
+            font-size: 13px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: rgba(193,87,45,0.1);
+            border: 1px solid var(--accent);
+            color: var(--accent-deep);
+            margin-bottom: 14px;
+            display: none;
+        }
+
+        #status-banner.show { display: block; }
+    </style>
+</head>
+<body>
+<div class="app">
+    <header>
+        <h1>Plaatsen<span class="sub">Dutch places trainer</span></h1>
+        <div class="mode-switch">
+            <button id="mode-click" class="active">Click the map</button>
+            <button id="mode-name">Name the place</button>
+        </div>
+    </header>
+
+    <div id="status-banner"></div>
+
+    <div class="layout">
+        <div class="map-card">
+            <div id="map"></div>
+        </div>
+
+        <div class="side-panel">
+            <div class="panel-card">
+                <p class="eyebrow" id="prompt-eyebrow">Find this place</p>
+                <p class="prompt-name" id="prompt-name">Loading…</p>
+                <p class="prompt-province" id="prompt-province"></p>
+
+                <!-- Name mode input (hidden in click mode) -->
+                <div class="name-input-row" id="name-input-row" style="display:none">
+                    <input type="text" id="name-input" placeholder="Type the place name…" autocomplete="off" />
+                    <button class="primary" id="submit-name">Check</button>
+                </div>
+
+                <div class="feedback" id="feedback"></div>
+
+                <div class="next-row">
+                    <button class="primary" id="next-btn" style="display:none">Next place →</button>
+                </div>
+
+                <p class="hint" id="hint-text">Click anywhere on the map where you think this place is.</p>
+            </div>
+
+            <div class="panel-card">
+                <p class="eyebrow">This session</p>
+                <div class="stats">
+                    <div>
+                        <strong id="stat-rounds">0</strong>
+                        rounds played
+                    </div>
+                    <div>
+                        <strong id="stat-score">0</strong>
+                        total score
+                    </div>
+                    <div>
+                        <strong id="stat-avg">—</strong>
+                        avg score
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script>
+    // ---- Configuration ----
+    // Change this if your backend runs on a different host/port.
+    const API_BASE = "http://localhost:8080";
+
+    // ---- State ----
+    let mode = "click"; // "click" or "name"
+    let allPlaces = [];          // [{id, name, province}] for click mode
+    let currentPlace = null;     // place object currently being asked about (click mode)
+    let currentTarget = null;    // {placeId, lat, lng, province} for name mode
+    let guessMarker = null;
+    let answerMarker = null;
+    let answerLine = null;
+    let roundActive = true;
+    let sessionRounds = 0;
+    let sessionScore = 0;
+
+    // ---- Map setup ----
+    const map = L.map('map', {
+        center: [52.2, 5.4],
+        zoom: 7,
+        minZoom: 6,
+        maxZoom: 12,
+        maxBounds: [[50.0, 2.5], [54.5, 8.0]]
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
+    }).addTo(map);
+
+    function showStatus(msg) {
+        const el = document.getElementById('status-banner');
+        el.textContent = msg;
+        el.classList.add('show');
+    }
+    function hideStatus() {
+        document.getElementById('status-banner').classList.remove('show');
+    }
+
+    function clearMapMarkers() {
+        if (guessMarker) { map.removeLayer(guessMarker); guessMarker = null; }
+        if (answerMarker) { map.removeLayer(answerMarker); answerMarker = null; }
+        if (answerLine) { map.removeLayer(answerLine); answerLine = null; }
+    }
+
+    // ---- Data loading ----
+    async function loadPlaces() {
+        try {
+            const res = await fetch(`${API_BASE}/places`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            allPlaces = await res.json();
+            hideStatus();
+        } catch (e) {
+            showStatus(
+                `Could not reach the backend at ${API_BASE}. Make sure it's running ` +
+                `(./gradlew run in the backend folder), then reload this page.`
+            );
+            console.error(e);
+        }
+    }
+
+    // ---- Mode switching ----
+    document.getElementById('mode-click').addEventListener('click', () => setMode('click'));
+    document.getElementById('mode-name').addEventListener('click', () => setMode('name'));
+
+    function setMode(newMode) {
+        mode = newMode;
+        document.getElementById('mode-click').classList.toggle('active', mode === 'click');
+        document.getElementById('mode-name').classList.toggle('active', mode === 'name');
+        document.getElementById('name-input-row').style.display = mode === 'name' ? 'flex' : 'none';
+        document.getElementById('hint-text').textContent = mode === 'click'
+            ? 'Click anywhere on the map where you think this place is.'
+            : 'A marker is shown on the map. Type the name of that place.';
+        document.getElementById('prompt-eyebrow').textContent = mode === 'click'
+            ? 'Find this place'
+            : 'What place is this?';
+        nextRound();
+    }
+
+    // ---- Round flow ----
+    async function nextRound() {
+        clearMapMarkers();
+        document.getElementById('feedback').classList.remove('show', 'correct', 'close', 'wrong');
+        document.getElementById('next-btn').style.display = 'none';
+        document.getElementById('name-input').value = '';
+        document.getElementById('name-input').disabled = false;
+        document.getElementById('submit-name').disabled = false;
+        roundActive = true;
+
+        if (mode === 'click') {
+            if (allPlaces.length === 0) { await loadPlaces(); }
+            if (allPlaces.length === 0) return;
+            currentPlace = allPlaces[Math.floor(Math.random() * allPlaces.length)];
+            document.getElementById('prompt-name').textContent = currentPlace.name;
+            document.getElementById('prompt-province').textContent = currentPlace.province || '';
+        } else {
+            try {
+                const res = await fetch(`${API_BASE}/round/name-target`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                currentTarget = await res.json();
+                hideStatus();
+                document.getElementById('prompt-name').textContent = '?';
+                document.getElementById('prompt-province').textContent = currentTarget.province || '';
+                const marker = L.circleMarker([currentTarget.lat, currentTarget.lng], {
+                    radius: 9, color: '#2B3A4A', weight: 2, fillColor: '#C1572D', fillOpacity: 0.9
+                }).addTo(map);
+                answerMarker = marker;
+                map.setView([currentTarget.lat, currentTarget.lng], 8);
+                document.getElementById('name-input').focus();
+            } catch (e) {
+                showStatus(`Could not reach the backend at ${API_BASE}. Make sure it's running, then try again.`);
+                console.error(e);
+            }
+        }
+    }
+
+    // ---- Click mode: handle map click ----
+    map.on('click', async (e) => {
+        if (mode !== 'click' || !roundActive || !currentPlace) return;
+        roundActive = false;
+
+        const { lat, lng } = e.latlng;
+        if (guessMarker) map.removeLayer(guessMarker);
+        guessMarker = L.circleMarker([lat, lng], {
+            radius: 7, color: '#2B3A4A', weight: 2, fillColor: '#C1572D', fillOpacity: 0.85
+        }).addTo(map);
+
+        try {
+            const res = await fetch(`${API_BASE}/guess/click`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ placeId: currentPlace.id, guessLat: lat, guessLng: lng })
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const result = await res.json();
+
+            answerMarker = L.circleMarker([result.correctLat, result.correctLng], {
+                radius: 7, color: '#2B3A4A', weight: 2, fillColor: '#4C7A52', fillOpacity: 0.9
+            }).addTo(map);
+            answerLine = L.polyline(
+                [[lat, lng], [result.correctLat, result.correctLng]],
+                { color: '#2B3A4A', weight: 1.5, dashArray: '4 5', opacity: 0.6 }
+            ).addTo(map);
+
+            showFeedback(result.score, result.distanceKm, result.correctName);
+            sessionRounds++;
+            sessionScore += result.score;
+            updateStats();
+            document.getElementById('next-btn').style.display = 'inline-block';
+        } catch (err) {
+            showStatus(`Could not reach the backend at ${API_BASE}. Make sure it's running, then try again.`);
+            console.error(err);
+            roundActive = true;
+        }
+    });
+
+    function showFeedback(score, distanceKm, correctName) {
+        const el = document.getElementById('feedback');
+        el.classList.remove('correct', 'close', 'wrong');
+        let cls = score >= 4000 ? 'correct' : score >= 1500 ? 'close' : 'wrong';
+        el.classList.add(cls, 'show');
+        el.innerHTML = `
+      <div class="score-row">
+        <span class="big">${score}</span>
+        <span class="label">points</span>
+      </div>
+      <div>${correctName} was ${distanceKm} km from your click.</div>
+    `;
+    }
+
+    // ---- Name mode: handle submit ----
+    document.getElementById('submit-name').addEventListener('click', submitNameGuess);
+    document.getElementById('name-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') submitNameGuess();
+    });
+
+    async function submitNameGuess() {
+        if (mode !== 'name' || !roundActive || !currentTarget) return;
+        const guess = document.getElementById('name-input').value.trim();
+        if (!guess) return;
+        roundActive = false;
+        document.getElementById('name-input').disabled = true;
+        document.getElementById('submit-name').disabled = true;
+
+        try {
+            const res = await fetch(`${API_BASE}/guess/name`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ placeId: currentTarget.placeId, guessName: guess })
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const result = await res.json();
+
+            document.getElementById('prompt-name').textContent = result.correctName;
+
+            const el = document.getElementById('feedback');
+            el.classList.remove('correct', 'close', 'wrong');
+            let score, cls, message;
+            if (result.isCorrect) {
+                score = 1000; cls = 'correct'; message = 'Correct!';
+            } else if (result.isClose) {
+                score = 500; cls = 'close'; message = `Close — you wrote "${guess}", the answer was "${result.correctName}".`;
+            } else {
+                score = 0; cls = 'wrong'; message = `Not quite — the answer was "${result.correctName}".`;
+            }
+            el.classList.add(cls, 'show');
+            el.innerHTML = `
+        <div class="score-row">
+          <span class="big">${score}</span>
+          <span class="label">points</span>
+        </div>
+        <div>${message}</div>
+      `;
+
+            sessionRounds++;
+            sessionScore += score;
+            updateStats();
+            document.getElementById('next-btn').style.display = 'inline-block';
+        } catch (err) {
+            showStatus(`Could not reach the backend at ${API_BASE}. Make sure it's running, then try again.`);
+            console.error(err);
+            roundActive = true;
+            document.getElementById('name-input').disabled = false;
+            document.getElementById('submit-name').disabled = false;
+        }
+    }
+
+    function updateStats() {
+        document.getElementById('stat-rounds').textContent = sessionRounds;
+        document.getElementById('stat-score').textContent = sessionScore;
+        document.getElementById('stat-avg').textContent = sessionRounds > 0
+            ? Math.round(sessionScore / sessionRounds)
+            : '—';
+    }
+
+    document.getElementById('next-btn').addEventListener('click', nextRound);
+
+    // ---- Boot ----
+    (async function init() {
+        await loadPlaces();
+        await nextRound();
+    })();
+</script>
+</body>
+</html>
