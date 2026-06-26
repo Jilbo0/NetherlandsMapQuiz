@@ -24,6 +24,19 @@ application {
 	mainClass.set("backend.ApplicationKt")
 }
 
+sourceSets {
+	main {
+		kotlin {
+			srcDirs("backend/src/main/kotlin")
+		}
+	}
+	test {
+		kotlin {
+			srcDirs("backend/src/test/kotlin")
+		}
+	}
+}
+
 java {
 	toolchain {
 		languageVersion.set(JavaLanguageVersion.of(25))
