@@ -264,8 +264,7 @@ private fun assessConfidence(result: NominatimResult): String {
 
 private fun slugify(name: String): String {
 	return name.lowercase()
-		.replace(Regex("""\(.*?\)"""), "")
-		.trim()
+		.replace(Regex("""\s*\((.*?)\)"""), "-$1")
 		.replace(Regex("""[^a-z0-9]+"""), "-")
 		.trim('-')
 }
