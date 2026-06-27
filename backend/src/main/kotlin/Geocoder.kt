@@ -1,5 +1,6 @@
 package backend
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit
  * Nominatim (OpenStreetMap) geocoding API.
  *
  * Usage:
- *   gradle run --args="../data/places_input.csv ../data/places.json ../data/review.csv"
+ *   gradle run --args="backend/src/main/resources/places_input.csv backend/data/places.json backend/data/review.csv"
  *
  * Behavior:
  *  - Respects Nominatim's usage policy: max 1 request/second, descriptive User-Agent.
@@ -38,6 +39,7 @@ data class GeocodedPlace(
 	val confidence: String // "ok", "low", "missing"
 )
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class NominatimResult(
 	val lat: String,
 	val lon: String,
@@ -77,7 +79,7 @@ fun main(args: Array<String>) {
 		try {
 			val list: List<GeocodedPlace> = mapper.readValue(outputFile)
 			list.associateBy { it.name }.toMutableMap()
-		} catch (e: Exception) {
+		} catch (_: Exception) {
 			mutableMapOf()
 		}
 	} else {
@@ -118,7 +120,7 @@ fun main(args: Array<String>) {
 			)
 			reviewRows.add("${csvEscape(row.name)},${csvEscape(row.province ?: "")},missing,,,")
 		} else {
-			val confidence = assessConfidence(row, result)
+			val confidence = assessConfidence(result)
 			println("  [$confidence] ${row.name} -> ${result.lat}, ${result.lon} (${result.display_name})")
 			existing[row.name] = GeocodedPlace(
 				id = slugify(row.name),
@@ -140,12 +142,12 @@ fun main(args: Array<String>) {
 		processed++
 		// Write incrementally every 25 places so a long run can be killed/resumed safely.
 		if (processed % 25 == 0) {
-			writeOutputs(existing, outputFile, reviewPath, reviewRows)
+			writeOutputs(existing, outputFile, reviewPath)
 			println("  ... progress saved ($processed processed this run)")
 		}
 	}
 
-	writeOutputs(existing, outputFile, reviewPath, reviewRows)
+	writeOutputs(existing, outputFile, reviewPath)
 	println("Done. ${existing.size} total places in $outputPath")
 	val missingCount = existing.values.count { it.confidence == "missing" }
 	val lowCount = existing.values.count { it.confidence == "low" }
@@ -254,7 +256,7 @@ private fun geocodeWithRetry(row: InputRow, maxRetries: Int = 3): NominatimResul
  * result type suggests a much larger/smaller feature than expected, flag for review.
  * This won't catch every wrong-disambiguation case, but catches the obvious ones.
  */
-private fun assessConfidence(row: InputRow, result: NominatimResult): String {
+private fun assessConfidence(result: NominatimResult): String {
 	val importance = result.importance ?: 0.0
 	if (importance < 0.25) return "low"
 	return "ok"
@@ -272,7 +274,6 @@ private fun writeOutputs(
 	existing: Map<String, GeocodedPlace>,
 	outputFile: File,
 	reviewPath: String,
-	reviewRows: List<String>
 ) {
 	val writer = mapper.writerWithDefaultPrettyPrinter()
 	outputFile.writeText(writer.writeValueAsString(existing.values.sortedBy { it.name }))
