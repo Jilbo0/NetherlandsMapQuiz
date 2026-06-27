@@ -17,6 +17,7 @@ dependencies {
 	implementation("io.ktor:ktor-server-call-logging-jvm:3.1.0")
 	implementation("com.squareup.okhttp3:okhttp:4.12.0")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
+	implementation("org.slf4j:slf4j-simple:2.0.13")
 	testImplementation("io.ktor:ktor-server-test-host:3.1.0")
 	testImplementation(kotlin("test"))
 }
