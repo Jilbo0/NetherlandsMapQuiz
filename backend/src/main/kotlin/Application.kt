@@ -11,6 +11,8 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.http.*
+import io.ktor.server.http.content.default
+import io.ktor.server.http.content.staticFiles
 import java.io.File
 
 /**
@@ -51,6 +53,11 @@ fun main() {
 
 	embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
 		module(repository)
+		routing {
+			staticFiles("/", File("frontend/src/main")) {
+				default("index.html")
+			}
+		}
 	}.start(wait = true)
 }
 
