@@ -49,6 +49,7 @@ fun main() {
 		println("Error loading data: ${e.message}")
 		return
 	}
+	ProvinceLookup.loadFromClasspath()
 
 	embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
 		module(repository)
@@ -107,6 +108,7 @@ fun Application.module(repository: PlaceRepository) {
 
 			val distance = GeoScoring.haversineKm(body.guessLat, body.guessLng, place.lat, place.lng)
 			val score = GeoScoring.scoreForDistance(distance)
+			val clickedProvince = ProvinceLookup.findProvince(body.guessLat, body.guessLng)
 
 			call.respond(
 				ClickGuessResponse(
@@ -115,7 +117,8 @@ fun Application.module(repository: PlaceRepository) {
 					distanceKm = Math.round(distance * 10) / 10.0,
 					score = score,
 					correctLat = place.lat,
-					correctLng = place.lng
+					correctLng = place.lng,
+					clickedProvince = clickedProvince
 				)
 			)
 		}

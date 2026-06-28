@@ -36,7 +36,8 @@ data class ClickGuessResponse(
 	val distanceKm: Double,
 	val score: Int,
 	val correctLat: Double,
-	val correctLng: Double
+	val correctLng: Double,
+	val clickedProvince: String?
 )
 
 /** Request body for the type-the-name guess mode. */
