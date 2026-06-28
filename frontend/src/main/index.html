@@ -471,7 +471,8 @@
             if (allPlaces.length === 0) return;
             currentPlace = allPlaces[Math.floor(Math.random() * allPlaces.length)];
             document.getElementById('prompt-name').textContent = currentPlace.name;
-            document.getElementById('prompt-province').textContent = currentPlace.province || '';
+            // Province intentionally hidden here — showing it would hint at where to click.
+            document.getElementById('prompt-province').textContent = '';
         } else {
             try {
                 const res = await fetch(`${API_BASE}/round/name-target`);
