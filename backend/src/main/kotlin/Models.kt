@@ -54,6 +54,18 @@ data class NameGuessResponse(
 	val distanceEdits: Int
 )
 
+/** Request body for the province-guess mode (click a province, given a place name). */
+data class ProvinceGuessRequest(
+	val placeId: String,
+	val guessedProvince: String
+)
+
+data class ProvinceGuessResponse(
+	val placeId: String,
+	val correctProvince: String,
+	val isCorrect: Boolean
+)
+
 /** A single round to play: the place to find, in whichever mode the client is running. */
 data class RoundResponse(
 	val placeId: String,

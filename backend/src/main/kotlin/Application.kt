@@ -24,8 +24,12 @@ import java.io.File
  *  GET  /round/name?placeId=X   -> nothing extra needed; client already knows the place's id from
  *                                   /places and shows it on the map via a separate reveal step.
  *                                   (See README in this file's comments for mode flow.)
+ *  GET  /round/province-target      -> a random place's id+name only — province is withheld, the
+ *                                       user must click the province on the map.
  *  POST /guess/click            -> { placeId, guessLat, guessLng } -> distance + score
  *  POST /guess/name             -> { placeId, guessName } -> correct/close + edit distance
+ *  POST /guess/province             -> { placeId, guessedProvince } -> correct/wrong + the
+ *                                       correct province name (used for the reveal after 3 misses)
  *
  * Mode flow (kept deliberately simple, logic lives client-side for which mode is active):
  *  - "Click" mode: client picks a random place from /places, shows its NAME, user clicks the
@@ -33,10 +37,16 @@ import java.io.File
  *  - "Name" mode: client picks a random place from /places, shows its LOCATION (a marker on
  *    the map — backend must supply this only when starting a name round, see /round/name-target),
  *    user types a guess, client POSTs to /guess/name.
+ *  - "Province" mode: client fetches /round/province-target (place name shown, province withheld),
+ *    user clicks a province polygon on the map, client POSTs the clicked province's name to
+ *    /guess/province. Wrong guesses can be retried (client tracks the attempt count and which
+ *    provinces were already tried); after 3 wrong tries the response's correctProvince is used
+ *    to reveal the answer client-side.
  *
  * Note: for "name" mode the client needs the coordinates to *display* the marker, so we expose
  * a dedicated endpoint that returns coordinates for a specific round (not the full list), to
- * avoid leaking the entire answer key up front the way GET /places does.
+ * avoid leaking the entire answer key up front the way GET /places does. The same principle
+ * applies to "province" mode's /round/province-target endpoint.
  */
 
 fun main() {
@@ -59,6 +69,29 @@ fun main() {
 			}
 		}
 	}.start(wait = true)
+}
+
+object ProvinceNames {
+	/**
+	 * Maps common alternate spellings/names for Dutch provinces to the canonical
+	 * name used by the boundary GeoJSON (which is what the frontend's clicked
+	 * polygon name will always be). This lets place data use whichever spelling
+	 * is most natural (e.g. "Friesland", the everyday Dutch name) without it
+	 * needing to match the boundary data's official/statutory name exactly.
+	 *
+	 * Keys are lowercased for case-insensitive lookup; add more variants here
+	 * if other places in your data use different province name spellings.
+	 */
+	private val aliases: Map<String, String> = mapOf(
+		"friesland" to "Fryslân",
+		"fryslan" to "Fryslân" // in case of missing/different diacritic encoding
+	)
+
+	/** Returns the canonical boundary-data province name for a given input name. */
+	fun canonicalize(name: String): String {
+		val trimmed = name.trim()
+		return aliases[trimmed.lowercase()] ?: trimmed
+	}
 }
 
 fun Application.module(repository: PlaceRepository) {
@@ -123,6 +156,19 @@ fun Application.module(repository: PlaceRepository) {
 			)
 		}
 
+		// Starts a "province" mode round: returns one random place's id + name only.
+		// The province is deliberately withheld — the user has to click it on the map.
+		get("/round/province-target") {
+			val place = repository.randomPlace()
+				?: return@get call.respond(HttpStatusCode.ServiceUnavailable, mapOf("error" to "No places loaded"))
+			call.respond(
+				mapOf(
+					"placeId" to place.id,
+					"name" to place.name
+				)
+			)
+		}
+
 		// Type-the-name scoring.
 		post("/guess/name") {
 			val body = call.receive<NameGuessRequest>()
@@ -138,6 +184,27 @@ fun Application.module(repository: PlaceRepository) {
 					isCorrect = isCorrect,
 					isClose = isClose,
 					distanceEdits = editDist
+				)
+			)
+		}
+
+		// Province-guess scoring. Province name matching is exact-but-lenient: case-insensitive,
+		// whitespace-trimmed, and alias-aware (e.g. "Friesland" in place data is treated the
+		// same as "Fryslân", the boundary data's official name — see ProvinceNames).
+		post("/guess/province") {
+			val body = call.receive<ProvinceGuessRequest>()
+			val place = repository.byId(body.placeId)
+				?: return@post call.respond(HttpStatusCode.NotFound, mapOf("error" to "Unknown placeId"))
+
+			val correctProvince = ProvinceNames.canonicalize(place.province ?: "")
+			val guessedProvince = ProvinceNames.canonicalize(body.guessedProvince)
+			val isCorrect = guessedProvince.equals(correctProvince, ignoreCase = true)
+
+			call.respond(
+				ProvinceGuessResponse(
+					placeId = place.id,
+					correctProvince = correctProvince,
+					isCorrect = isCorrect
 				)
 			)
 		}
