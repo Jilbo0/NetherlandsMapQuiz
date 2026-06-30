@@ -669,6 +669,7 @@
   // ---- Province mode: round flow ----
   async function nextProvinceRound() {
     isProcessingGuess = false;
+    roundActive = true;
 
     resetProvinceLayerStyles();
     provinceWrongTries = 0;
@@ -752,6 +753,7 @@
 
   async function handleProvinceClick(clickedProvinceName) {
     // 1. Guard: Prevent overlapping clicks during an active network request
+    if (!roundActive) return;
     if (isProcessingGuess) return;
 
     // 2. Guard: Ensure there is a target province to guess
