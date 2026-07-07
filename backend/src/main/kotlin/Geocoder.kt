@@ -14,29 +14,34 @@ import java.util.concurrent.TimeUnit
  * Geocodes a CSV of Dutch place names into a places.json file using the
  * Nominatim (OpenStreetMap) geocoding API.
  *
+ * CSV format: just a single "name" column — no province column needed.
+ * Province is derived automatically from the geocoded coordinates using
+ * the same province boundary data the backend uses for click detection.
+ *
  * Usage:
- *   gradle run --args="backend/src/main/resources/places_input.csv backend/data/places.json backend/data/review.csv"
+ *   gradle run --args="../data/places_input.csv ../data/places.json ../data/review.csv"
  *
  * Behavior:
  *  - Respects Nominatim's usage policy: max 1 request/second, descriptive User-Agent.
  *  - Resumable: if places.json already has entries (from a previous partial run),
  *    already-geocoded names are skipped.
- *  - Low-confidence or missing results are written to review.csv instead of
- *    silently trusting them, so you can manually check/fix them later.
- *  - Disambiguator in parentheses, e.g. "Aalst (Buren)", is used to bias the
- *    search query but stripped from the display name.
+ *  - Flags for review: low Nominatim confidence, missing results, or coordinates
+ *    that don't land inside any province polygon (likely a geocoding mislocation).
+ *  - Disambiguators in parentheses, e.g. "Aalst (Buren)", are used as extra context
+ *    in the Nominatim query to improve accuracy for ambiguous place names.
  */
 
-data class InputRow(val name: String, val province: String?)
+// Input is now just a name — province is derived from coordinates, not typed manually.
+data class InputRow(val name: String)
 
 data class GeocodedPlace(
 	val id: String,
 	val name: String,
-	val province: String?,
+	val province: String?,   // derived from coordinates via ProvinceLookup, not from CSV
 	val lat: Double,
 	val lng: Double,
 	val displayName: String,
-	val confidence: String // "ok", "low", "missing"
+	val confidence: String   // "ok", "low", "missing"
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -56,20 +61,25 @@ private val httpClient = OkHttpClient.Builder()
 	.readTimeout(15, TimeUnit.SECONDS)
 	.build()
 
+// IMPORTANT: Nominatim's usage policy requires a real, descriptive User-Agent.
+// Replace the contact info before running a large batch job.
 private const val USER_AGENT = "nl-places-quiz-geocoder/1.0 (contact: jille.du.bois@me.com)"
 private const val NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 private const val MIN_DELAY_MS = 1100L // a bit over 1s to be safely within policy
 
 fun main(args: Array<String>) {
-	val inputPath = args.getOrNull(0) ?: "../../resources/places_input.csv"
-	val outputPath = args.getOrNull(1) ?: "../../resources/places.json"
-	val reviewPath = args.getOrNull(2) ?: "../../resources/review.csv"
+	val inputPath = args.getOrNull(0) ?: "../data/places_input.csv"
+	val outputPath = args.getOrNull(1) ?: "../data/places.json"
+	val reviewPath = args.getOrNull(2) ?: "../data/review.csv"
 
 	val inputFile = File(inputPath)
 	if (!inputFile.exists()) {
 		System.err.println("Input file not found: $inputPath")
 		return
 	}
+
+	// Load province boundaries for coordinate-to-province lookup.
+	ProvinceLookup.loadFromClasspath()
 
 	val rows = readInputCsv(inputFile)
 	println("Loaded ${rows.size} place names from $inputPath")
@@ -79,7 +89,7 @@ fun main(args: Array<String>) {
 		try {
 			val list: List<GeocodedPlace> = mapper.readValue(outputFile)
 			list.associateBy { it.name }.toMutableMap()
-		} catch (_: Exception) {
+		} catch (e: Exception) {
 			mutableMapOf()
 		}
 	} else {
@@ -90,7 +100,6 @@ fun main(args: Array<String>) {
 		println("Resuming: ${existing.size} places already geocoded, will skip those.")
 	}
 
-	val reviewRows = mutableListOf<String>()
 	var processed = 0
 	var lastRequestTime = 0L
 
@@ -112,31 +121,33 @@ fun main(args: Array<String>) {
 			existing[row.name] = GeocodedPlace(
 				id = slugify(row.name),
 				name = row.name,
-				province = row.province,
+				province = null,
 				lat = 0.0,
 				lng = 0.0,
 				displayName = "",
 				confidence = "missing"
 			)
-			reviewRows.add("${csvEscape(row.name)},${csvEscape(row.province ?: "")},missing,,,")
 		} else {
-			val confidence = assessConfidence(result)
-			println("  [$confidence] ${row.name} -> ${result.lat}, ${result.lon} (${result.display_name})")
+			val lat = result.lat.toDouble()
+			val lng = result.lon.toDouble()
+
+			// Derive province from the geocoded coordinates. If null, the coordinates
+			// landed outside all province polygons — likely a mislocation by Nominatim
+			// (e.g. resolved to a different country, or to an offshore point).
+			val province = ProvinceLookup.findProvince(lat, lng)
+
+			val confidence = assessConfidence(result, province)
+			println("  [$confidence] ${row.name} -> $lat, $lng | province: ${province ?: "NONE"} (${result.display_name})")
+
 			existing[row.name] = GeocodedPlace(
 				id = slugify(row.name),
 				name = row.name,
-				province = row.province,
-				lat = result.lat.toDouble(),
-				lng = result.lon.toDouble(),
+				province = province,
+				lat = lat,
+				lng = lng,
 				displayName = result.display_name,
 				confidence = confidence
 			)
-			if (confidence == "low") {
-				reviewRows.add(
-					"${csvEscape(row.name)},${csvEscape(row.province ?: "")},low," +
-							"${result.lat},${result.lon},${csvEscape(result.display_name)}"
-				)
-			}
 		}
 
 		processed++
@@ -161,17 +172,19 @@ private fun readInputCsv(file: File): List<InputRow> {
 	if (lines.isEmpty()) return emptyList()
 	val header = lines.first().split(",")
 	val nameIdx = header.indexOfFirst { it.trim().equals("name", ignoreCase = true) }
-	val provinceIdx = header.indexOfFirst { it.trim().equals("province", ignoreCase = true) }
+	if (nameIdx < 0) {
+		System.err.println("CSV must have a 'name' column header.")
+		return emptyList()
+	}
 	return lines.drop(1).mapNotNull { line ->
 		val cols = splitCsvLine(line)
 		val name = cols.getOrNull(nameIdx)?.trim() ?: return@mapNotNull null
 		if (name.isEmpty()) return@mapNotNull null
-		val province = if (provinceIdx >= 0) cols.getOrNull(provinceIdx)?.trim() else null
-		InputRow(name, province?.takeIf { it.isNotEmpty() })
+		InputRow(name)
 	}
 }
 
-// Minimal CSV line splitter handling simple quoted fields (sufficient for our controlled input).
+// Minimal CSV line splitter handling simple quoted fields.
 private fun splitCsvLine(line: String): List<String> {
 	val result = mutableListOf<String>()
 	val sb = StringBuilder()
@@ -179,10 +192,7 @@ private fun splitCsvLine(line: String): List<String> {
 	for (c in line) {
 		when {
 			c == '"' -> inQuotes = !inQuotes
-			c == ',' && !inQuotes -> {
-				result.add(sb.toString())
-				sb.clear()
-			}
+			c == ',' && !inQuotes -> { result.add(sb.toString()); sb.clear() }
 			else -> sb.append(c)
 		}
 	}
@@ -190,34 +200,25 @@ private fun splitCsvLine(line: String): List<String> {
 	return result
 }
 
-private fun csvEscape(value: String): String {
-	return if (value.contains(",") || value.contains("\"")) {
+private fun csvEscape(value: String): String =
+	if (value.contains(",") || value.contains("\""))
 		"\"${value.replace("\"", "\"\"")}\""
-	} else {
-		value
-	}
-}
+	else value
 
 /**
- * Builds the search query. The disambiguator in parentheses (e.g. "Aalst (Buren)")
- * is used as extra context for Nominatim, and the province is appended when present.
- * Example: "Aalst (Buren)" + province "Gelderland" ->
- *          "Aalst, Buren, Gelderland, Netherlands"
+ * Builds the Nominatim search query. The disambiguator in parentheses (e.g. "Aalst (Buren)")
+ * is still used as extra query context — it helps Nominatim find the right place even without
+ * an explicit province. Example: "Aalst (Buren)" -> "Aalst, Buren, Netherlands"
  */
 private fun buildQuery(row: InputRow): String {
 	val nameMatch = Regex("""^(.*?)\s*\((.*?)\)\s*$""").find(row.name)
-	val baseName: String
-	val qualifier: String?
+	val parts = mutableListOf<String>()
 	if (nameMatch != null) {
-		baseName = nameMatch.groupValues[1].trim()
-		qualifier = nameMatch.groupValues[2].trim()
+		parts.add(nameMatch.groupValues[1].trim())
+		parts.add(nameMatch.groupValues[2].trim())
 	} else {
-		baseName = row.name.trim()
-		qualifier = null
+		parts.add(row.name.trim())
 	}
-	val parts = mutableListOf(baseName)
-	if (qualifier != null) parts.add(qualifier)
-	if (row.province != null) parts.add(row.province)
 	parts.add("Netherlands")
 	return parts.joinToString(", ")
 }
@@ -252,34 +253,36 @@ private fun geocodeWithRetry(row: InputRow, maxRetries: Int = 3): NominatimResul
 }
 
 /**
- * Heuristic confidence check: if Nominatim's importance score is low, or the
- * result type suggests a much larger/smaller feature than expected, flag for review.
- * This won't catch every wrong-disambiguation case, but catches the obvious ones.
+ * Confidence assessment. Flags as "low" if:
+ *  - Nominatim's importance score is low (weak or ambiguous match), OR
+ *  - Province lookup returned null (coordinates outside all NL province polygons,
+ *    suggesting Nominatim may have resolved to a wrong or offshore location).
  */
-private fun assessConfidence(result: NominatimResult): String {
+private fun assessConfidence(result: NominatimResult, province: String?): String {
+	if (province == null) return "low"
 	val importance = result.importance ?: 0.0
 	if (importance < 0.25) return "low"
 	return "ok"
 }
 
-private fun slugify(name: String): String {
-	return name.lowercase()
-		.replace(Regex("""\s*\((.*?)\)"""), "-$1")
+private fun slugify(name: String): String =
+	name.lowercase()
+		.replace(Regex("""\(.*?\)"""), "")
+		.trim()
 		.replace(Regex("""[^a-z0-9]+"""), "-")
 		.trim('-')
-}
 
 private fun writeOutputs(
 	existing: Map<String, GeocodedPlace>,
 	outputFile: File,
-	reviewPath: String,
+	reviewPath: String
 ) {
 	val writer = mapper.writerWithDefaultPrettyPrinter()
 	outputFile.writeText(writer.writeValueAsString(existing.values.sortedBy { it.name }))
 
 	val reviewFile = File(reviewPath)
-	val header = "name,province,confidence,lat,lng,display_name\n"
-	val allReviewRows = existing.values
+	val header = "name,derived_province,confidence,lat,lng,display_name\n"
+	val reviewRows = existing.values
 		.filter { it.confidence != "ok" }
 		.map {
 			"${csvEscape(it.name)},${csvEscape(it.province ?: "")},${it.confidence}," +
@@ -287,5 +290,5 @@ private fun writeOutputs(
 					"${if (it.confidence == "missing") "" else it.lng}," +
 					csvEscape(it.displayName)
 		}
-	reviewFile.writeText(header + allReviewRows.joinToString("\n"))
+	reviewFile.writeText(header + reviewRows.joinToString("\n"))
 }
