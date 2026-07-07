@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
  * the same province boundary data the backend uses for click detection.
  *
  * Usage:
- *   gradle run --args="../data/places_input.csv ../data/places.json ../data/review.csv"
+ *   gradle run --args="../data/places_small.csv ../data/places.json ../data/review.csv"
  *
  * Behavior:
  *  - Respects Nominatim's usage policy: max 1 request/second, descriptive User-Agent.
@@ -68,7 +68,7 @@ private const val NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 private const val MIN_DELAY_MS = 1100L // a bit over 1s to be safely within policy
 
 fun main(args: Array<String>) {
-	val inputPath = args.getOrNull(0) ?: "../data/places_input.csv"
+	val inputPath = args.getOrNull(0) ?: "../data/places_small.csv"
 	val outputPath = args.getOrNull(1) ?: "../data/places.json"
 	val reviewPath = args.getOrNull(2) ?: "../data/review.csv"
 
@@ -265,13 +265,12 @@ private fun assessConfidence(result: NominatimResult, province: String?): String
 	return "ok"
 }
 
-private fun slugify(name: String): String =
-	name.lowercase()
-		.replace(Regex("""\(.*?\)"""), "")
-		.trim()
+private fun slugify(name: String): String {
+	return name.lowercase()
+		.replace(Regex("""\s*\((.*?)\)"""), "-$1")
 		.replace(Regex("""[^a-z0-9]+"""), "-")
 		.trim('-')
-
+}
 private fun writeOutputs(
 	existing: Map<String, GeocodedPlace>,
 	outputFile: File,
