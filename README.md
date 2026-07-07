@@ -19,7 +19,7 @@ To run the application, set up the following configurations in IntelliJ IDEA.
 Used to generate/update the `places.json` file from your CSV input.
 - **Name**: `Run Geocoder`
 - **Main Class**: `backend.GeocoderKt`
-- **Program Arguments**: `backend/src/main/resources/places_input.csv backend/data/places.json backend/data/review.csv`
+- **Program Arguments**: `backend/src/main/resources/places.csv backend/data/places.json backend/data/review.csv`
 - **Working Directory**: [Project Root]
 
 ### 2. Run Server
@@ -35,6 +35,15 @@ Used to start the **Ktor** backend to serve the application.
 --enable-native-access=ALL-UNNAMED```
 - Working Directory: [Project Root]
 
+# Adding Entries
+1. Navigate to `backend/src/main/resources/places.csv`.
+2. Add a new line following the existing format: `Name`.
+   - Example: `Utrecht`
+   - Example: `Lelystad`
+3. If you are adding a place that shares a name with another (e.g., Achttienhoven), ensure you include the disambiguator in parentheses to help the Geocoder:
+   - `Name (Municipality)`
+   - Example: `Achttienhoven (Utrecht)`
+
 # How to Play
 1. **Geocoding**: Run the `Geocoder` to ensure your `data/places.json` is up to date.
 2. **Launch Server**: Run the Server configuration.
@@ -42,16 +51,7 @@ Used to start the **Ktor** backend to serve the application.
 4. **Modes**:
    - **Click Mode**: The app displays a place name; you must click the correct location on the interactive map.
    - **Name Mode**: The app shows a marker on the map; you must type the name of the place.
-
-# Adding Entries
-1. Navigate to `backend/src/main/resources/places_input.csv`. 
-2. Add a new line following the existing format: `Name,Province`.
-   - Example: `Utrecht,Utrecht`
-   - Example: `Lelystad,Flevoland`
-3. If you are adding a place that shares a name with another (e.g., Achttienhoven), ensure you include the disambiguator in parentheses to help the Geocoder:
-   - `Name (Municipality),Province`
-   - Example: `Achttienhoven (Utrecht),Utrecht`
-
+   - **Province Mode**: The app displays a place name; you must click the correct province on the map within three tries.
 # Technical Overview
 The backend uses **Ktor** with **Netty**, leveraging **Jackson** for **JSON serialization**. **Geocoding** is performed via the **Nominatim (OpenStreetMap)** API, with built-in throtlling and confidence heuristics to ensure data quality.
 
