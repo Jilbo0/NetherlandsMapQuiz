@@ -2205,7 +2205,7 @@
   "lat" : 51.594167,
   "lng" : 4.845833,
   "displayName" : "Baarschot (Oosterhout), Oosterhout, Noord-Brabant, Nederland",
-  "confidence" : "missing"
+  "confidence" : "ok"
 }, {
   "id" : "baarsdorp",
   "name" : "Baarsdorp",
@@ -2249,11 +2249,11 @@
 }, {
   "id" : "bad-nieuweschans",
   "name" : "Bad Nieuweschans",
-  "province" : null,
-  "lat" : 53.1799334,
-  "lng" : 7.2093739,
+  "province" : "Groningen",
+  "lat" : 53.180556,
+  "lng" : 7.207222,
   "displayName" : "Bad Nieuweschans, Oldambt, Groningen, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "badhoevedorp",
   "name" : "Badhoevedorp",
@@ -2513,11 +2513,11 @@
 }, {
   "id" : "barendrechtse-veer",
   "name" : "Barendrechtse Veer",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Zuid-Holland",
+  "lat" : 51.835,
+  "lng" : 4.530556,
+  "displayName" : "Barendrechtse Veer, Barendrecht, Zuid-Holland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "bareveld",
   "name" : "Bareveld",
@@ -2601,11 +2601,11 @@
 }, {
   "id" : "barnegaten",
   "name" : "Barnegaten",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.328889,
+  "lng" : 6.411944,
+  "displayName" : "Barnegaten, Het Hogeland, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "barneveld",
   "name" : "Barneveld",
@@ -2721,11 +2721,11 @@
 }, {
   "id" : "bath",
   "name" : "Bath",
-  "province" : null,
-  "lat" : 51.4012453,
-  "lng" : 4.2090132,
+  "province" : "Zeeland",
+  "lat" : 51.403056,
+  "lng" : 4.209444,
   "displayName" : "Bath, Rilland, Reimerswaal, Zeeland, Nederland, 4411 RM, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "bathmen",
   "name" : "Bathmen",
@@ -2937,11 +2937,11 @@
 }, {
   "id" : "beersterhoogen",
   "name" : "Beersterhoogen",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.183056,
+  "lng" : 7.135,
+  "displayName" : "Beersterhoogen, Oldambt, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "beerta",
   "name" : "Beerta",
@@ -3337,11 +3337,11 @@
 }, {
   "id" : "berdelingebuurte",
   "name" : "Berdelingebuurte",
-  "province" : null,
-  "lat" : 51.2020794,
-  "lng" : 3.8851093,
+  "province" : "Zeeland",
+  "lat" : 51.203611,
+  "lng" : 3.884722,
   "displayName" : "Berdelingebuurte, Overslag, Terneuzen, Zeeland, Nederland, 4575 NB, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "berenbroek",
   "name" : "Berenbroek",
@@ -3601,11 +3601,11 @@
 }, {
   "id" : "berkeind",
   "name" : "Berkeind",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Brabant",
+  "lat" : 51.551944,
+  "lng" : 4.97,
+  "displayName" : "Berkeind, Tilburg, Noord-Brabant, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "berkeindje",
   "name" : "Berkeindje",
@@ -3809,11 +3809,11 @@
 }, {
   "id" : "beusum",
   "name" : "Beusum",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.355556,
+  "lng" : 6.299167,
+  "displayName" : "Beusem, Het Hogeland, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "beutenaken",
   "name" : "Beutenaken",
@@ -4097,11 +4097,11 @@
 }, {
   "id" : "blankeweer",
   "name" : "Blankeweer",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.13,
+  "lng" : 6.645,
+  "displayName" : "Blankeweer, Groningen, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "blaricum",
   "name" : "Blaricum",
@@ -4673,11 +4673,11 @@
 }, {
   "id" : "boltklap",
   "name" : "Boltklap",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.272778,
+  "lng" : 6.700556,
+  "displayName" : "Boltklap, Groningen, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "bommelskous",
   "name" : "Bommelskous",
@@ -4977,11 +4977,11 @@
 }, {
   "id" : "boschdorp",
   "name" : "Boschdorp",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Zeeland",
+  "lat" : 51.235556,
+  "lng" : 3.976389,
+  "displayName" : "Boschdorp, Terneuzen, Zeeland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "boscheind",
   "name" : "Boscheind",
@@ -4993,11 +4993,11 @@
 }, {
   "id" : "boschhoven-baarle-nassau",
   "name" : "Boschhoven (Baarle-Nassau)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Brabant",
+  "lat" : 51.457222,
+  "lng" : 4.939722,
+  "displayName" : "Boschhoven (Baarle-Nassau), Baarle-Nassau, Noord-Brabant, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "boschhoven-heeze-leende",
   "name" : "Boschhoven (Heeze-Leende)",
@@ -5185,11 +5185,11 @@
 }, {
   "id" : "bouwtenheerd",
   "name" : "Bouwtenheerd",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.345235,
+  "lng" : 6.876624,
+  "displayName" : "Bouwtenheerd, Eemsdelta, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "boven-pekela",
   "name" : "Boven Pekela",
@@ -5289,11 +5289,11 @@
 }, {
   "id" : "bovenkerk-vlist",
   "name" : "Bovenkerk (Vlist)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Zuid-Holland",
+  "lat" : 51.974667,
+  "lng" : 4.788189,
+  "displayName" : "Bovenkerk (Vlist), Krimpenerwaard, Zuid-Holland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "bovenrijge",
   "name" : "Bovenrijge",
@@ -5353,27 +5353,27 @@
 }, {
   "id" : "bovenstreek-westerlee",
   "name" : "Bovenstreek (Westerlee)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.126561,
+  "lng" : 6.960458,
+  "displayName" : "Bovenstreek (Westerlee), Oldambt, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "bovenstreek-westerwolde",
   "name" : "Bovenstreek (Westerwolde)",
   "province" : "Groningen",
-  "lat" : 53.0913541,
-  "lng" : 7.153683,
+  "lat" : 53.095028,
+  "lng" : 7.157372,
   "displayName" : "1e Bovenstreeklaan, Rhederbrug, Bellingwolde, Westerwolde, Groningen, Nederland, 9695 BN, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "bovenstreek-winschoten",
   "name" : "Bovenstreek (Winschoten)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.132044,
+  "lng" : 7.013886,
+  "displayName" : "Bovenstreek (Winschoten), Oldambt, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "bovenveen",
   "name" : "Bovenveen",
@@ -5409,19 +5409,19 @@
 }, {
   "id" : "braakeind",
   "name" : "Braakeind",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Brabant",
+  "lat" : 51.403611,
+  "lng" : 5.175278,
+  "displayName" : "Braakeind, Reusel-De Mierden, Noord-Brabant, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "braamberg-de-wolden-hardenberg",
   "name" : "Braamberg (De Wolden/Hardenberg)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Drenthe",
+  "lat" : 52.648056,
+  "lng" : 6.502778,
+  "displayName" : "Braamberg, De Wolden, Hardenberg, Drenthe, Overijssel, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "braamberg-stadskanaal",
   "name" : "Braamberg (Stadskanaal)",
@@ -5473,11 +5473,11 @@
 }, {
   "id" : "brammelerbroek",
   "name" : "Brammelerbroek",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Gelderland",
+  "lat" : 52.155556,
+  "lng" : 6.662222,
+  "displayName" : "Brammelerbroek, Berkelland, Gelderland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "brammelo",
   "name" : "Brammelo",
@@ -5489,11 +5489,11 @@
 }, {
   "id" : "brand-landerd",
   "name" : "Brand (Landerd)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Brabant",
+  "lat" : 51.688889,
+  "lng" : 5.673333,
+  "displayName" : "Brand (Landerd), Maashorst, Noord-Brabant, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "brand-nuth",
   "name" : "Brand (Nuth)",
@@ -5625,11 +5625,11 @@
 }, {
   "id" : "breezanddijk",
   "name" : "Breezanddijk",
-  "province" : null,
+  "province" : "Fryslân",
   "lat" : 53.0199135,
   "lng" : 5.2094217,
   "displayName" : "Breezanddijk, Súdwest-Fryslân, Fryslân, Nederland, 8766 TS, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "bregtdorp",
   "name" : "Bregtdorp",
@@ -5801,11 +5801,11 @@
 }, {
   "id" : "broek-de-marne",
   "name" : "Broek (De Marne)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.394722,
+  "lng" : 6.424167,
+  "displayName" : "Broek (De Marne), Het Hogeland, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "broek-duiven",
   "name" : "Broek (Duiven)",
@@ -5813,7 +5813,7 @@
   "lat" : 51.9593216,
   "lng" : 6.0286926,
   "displayName" : "Broekstraat, De Eng, Duiven, Gelderland, Nederland, 6921 RE, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "broek-friesland",
   "name" : "Broek (Friesland)",
@@ -5829,7 +5829,7 @@
   "lat" : 52.0149592,
   "lng" : 4.6793255,
   "displayName" : "Broek, Gouda, Zuid-Holland, Nederland, 2809 NE, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "broek-gulpen-wittem",
   "name" : "Broek (Gulpen-Wittem)",
@@ -5845,7 +5845,7 @@
   "lat" : 51.5279733,
   "lng" : 5.5618378,
   "displayName" : "Broek, Mariahout, Laarbeek, Noord-Brabant, Nederland, 5738 PH, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "broek-simpelveld",
   "name" : "Broek (Simpelveld)",
@@ -5853,7 +5853,7 @@
   "lat" : 50.827232,
   "lng" : 5.9986062,
   "displayName" : "Broek, Bocholtz, Simpelveld, Limburg, Nederland, 6351 AB, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "broek-tegelen",
   "name" : "Broek (Tegelen)",
@@ -5861,15 +5861,15 @@
   "lat" : 51.3483092,
   "lng" : 6.1446654,
   "displayName" : "Broeklaan, Maasveld II, Tegelen, Venlo, Limburg, Nederland, 5931 ME, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "broek-zederik",
   "name" : "Broek (Zederik)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Utrecht",
+  "lat" : 51.932222,
+  "lng" : 4.968333,
+  "displayName" : "Broek (Zederik), Vijfheerenlanden, Utrecht, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "broek-in-waterland",
   "name" : "Broek in Waterland",
@@ -5977,11 +5977,11 @@
 }, {
   "id" : "broekhuizen-landgraaf",
   "name" : "Broekhuizen (Landgraaf)",
-  "province" : null,
+  "province" : "Limburg",
   "lat" : 50.9114463,
   "lng" : 6.080969,
   "displayName" : "Broekhuizen, Rimburg, Landgraaf, Limburg, Nederland, 6374 LL, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "broekhuizen-overijssel",
   "name" : "Broekhuizen (Overijssel)",
@@ -6017,11 +6017,11 @@
 }, {
   "id" : "broekkant-sint-anthonis",
   "name" : "Broekkant (Sint Anthonis)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Brabant",
+  "lat" : 51.666944,
+  "lng" : 5.826111,
+  "displayName" : "Broekkant (Sint Anthonis), Land van Cuijk, Noord-Brabant, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "broekkant-someren",
   "name" : "Broekkant (Someren)",
@@ -6185,11 +6185,11 @@
 }, {
   "id" : "bruggen-mill-en-sint-hubert",
   "name" : "Bruggen (Mill en Sint Hubert)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Brabant",
+  "lat" : 51.700278,
+  "lng" : 5.776944,
+  "displayName" : "Bruggen (Mill en Sint Hubert), Land van Cuijk, Noord-Brabant, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "bruggenhoek",
   "name" : "Bruggenhoek",
@@ -6993,11 +6993,11 @@
 }, {
   "id" : "cornelissenwerf",
   "name" : "Cornelissenwerf",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Holland",
+  "lat" : 52.774982,
+  "lng" : 4.783973,
+  "displayName" : "Cornelissenwerf, Schagen, Noord-Holland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "cornjum",
   "name" : "Cornjum",
@@ -7257,11 +7257,11 @@
 }, {
   "id" : "de-bult-bellingwedde",
   "name" : "De Bult (Bellingwedde)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.151944,
+  "lng" : 7.131667,
+  "displayName" : "De Bult (Bellingwedde), Westerwolde, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "de-bult-steenwijkerland",
   "name" : "De Bult (Steenwijkerland)",
@@ -7536,12 +7536,12 @@
   "confidence" : "ok"
 }, {
   "id" : "de-pol-gem-hardenberg",
-  "name" : "De Pol (gem. Hardenberg)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "name" : "De Pol (Hardenberg)",
+  "province" : "Overijssel",
+  "lat" : 52.603611,
+  "lng" : 6.415,
+  "displayName" : "De Pol, Hardenberg, Overijssel, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "de-pollen",
   "name" : "De Pollen",
@@ -7553,11 +7553,11 @@
 }, {
   "id" : "de-poppe",
   "name" : "De Poppe",
-  "province" : null,
-  "lat" : 52.314791,
-  "lng" : 7.0441505,
+  "province" : "Overijssel",
+  "lat" : 52.316667,
+  "lng" : 7.033333,
   "displayName" : "De Poppe, de Lutte, Losser, Overijssel, Nederland, 7587 GB, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "de-punt",
   "name" : "De Punt",
@@ -7657,11 +7657,11 @@
 }, {
   "id" : "de-weere-niedorp",
   "name" : "De Weere (Niedorp)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Holland",
+  "lat" : 52.774444,
+  "lng" : 4.866944,
+  "displayName" : "De Weere (Niedorp), Hollands Kroon, Noord-Holland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "de-weere-opmeer",
   "name" : "De Weere (Opmeer)",
@@ -7897,11 +7897,11 @@
 }, {
   "id" : "den-ham-zuidhorn",
   "name" : "Den Ham (Zuidhorn)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.273056,
+  "lng" : 6.428056,
+  "displayName" : "Den Ham (Zuidhorn), Westerkwartier, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "den-helder",
   "name" : "Den Helder",
@@ -8072,12 +8072,12 @@
   "confidence" : "ok"
 }, {
   "id" : "diefdijk-geldermalsen",
-  "name" : "Diefdijk (Geldermalsen",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "name" : "Diefdijk (Geldermalsen, Leerdam en Vianen)",
+  "province" : "Gelderland",
+  "lat" : 51.933575,
+  "lng" : 5.149242,
+  "displayName" : "Diefdijk (Geldermalsen, Leerdam en Vianen), West Betuwe, Gelderland, Utrecht, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "diefdijk-leerdam",
   "name" : "Diefdijk (Leerdam)",
@@ -8559,14 +8559,6 @@
   "displayName" : "Driebruggen, Bodegraven-Reeuwijk, Zuid-Holland, Nederland",
   "confidence" : "ok"
 }, {
-  "id" : "driehuis-uden",
-  "name" : "Driehuis (Uden)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
-}, {
   "id" : "driehuis-velsen",
   "name" : "Driehuis (Velsen)",
   "province" : "Noord-Holland",
@@ -8575,13 +8567,21 @@
   "displayName" : "Driehuis NH, Velsen, Noord-Holland, Nederland",
   "confidence" : "ok"
 }, {
+  "id" : "driehuis-uden",
+  "name" : "Driehuis (Uden)",
+  "province" : "Noord-Brabant",
+  "lat" : 51.635398,
+  "lng" : 5.613739,
+  "displayName" : "Driehuis (Uden), Uden, Noord-Brabant, Nederland",
+  "confidence" : "ok"
+}, {
   "id" : "driehuizen-baarle-nassau",
   "name" : "Driehuizen (Baarle-Nassau)",
   "province" : "Noord-Brabant",
   "lat" : 51.4533124,
   "lng" : 4.965485,
   "displayName" : "Driehuizen, Baarle-Nassau, Noord-Brabant, Nederland, 5111 PK, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "driehuizen-eersel",
   "name" : "Driehuizen (Eersel)",
@@ -8601,11 +8601,11 @@
 }, {
   "id" : "driehuizen-schermer",
   "name" : "Driehuizen (Schermer)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Holland",
+  "lat" : 52.578889,
+  "lng" : 4.808889,
+  "displayName" : "Driehuizen (Schermer), Alkmaar, Noord-Holland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "driehuizen-texel",
   "name" : "Driehuizen (Texel)",
@@ -8945,19 +8945,19 @@
 }, {
   "id" : "ee-dongeradeel",
   "name" : "Ee (Dongeradeel)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Fryslân",
+  "lat" : 53.33,
+  "lng" : 6.1,
+  "displayName" : "Ee (Dongeradeel), Noardeast-Fryslân, Fryslân, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "ee-littenseradeel",
   "name" : "Ee (Littenseradeel)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Fryslân",
+  "lat" : 53.116667,
+  "lng" : 5.583333,
+  "displayName" : "Ee (Littenseradeel), Littenseradeel, Fryslân, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "eede",
   "name" : "Eede",
@@ -9601,11 +9601,11 @@
 }, {
   "id" : "enkhuizen",
   "name" : "Enkhuizen",
-  "province" : null,
-  "lat" : 52.7577195,
-  "lng" : 5.3206941,
+  "province" : "Noord-Holland",
+  "lat" : 52.703611,
+  "lng" : 5.285278,
   "displayName" : "Enkhuizen, Noord-Holland, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "ens",
   "name" : "Ens",
@@ -11065,11 +11065,11 @@
 }, {
   "id" : "groenveld-harenkarspel",
   "name" : "Groenveld (Harenkarspel)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Holland",
+  "lat" : 52.766667,
+  "lng" : 4.783333,
+  "displayName" : "Groenveld (Harenkarspel), Schagen, Noord-Holland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "groenveld-venlo",
   "name" : "Groenveld (Venlo)",
@@ -11365,15 +11365,15 @@
   "lat" : 51.92834,
   "lng" : 6.6457242,
   "displayName" : "Haart, Aalten, Gelderland, Nederland, 7121 KS, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "haart-boxmeer",
   "name" : "Haart (Boxmeer)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Brabant",
+  "lat" : 51.685,
+  "lng" : 5.910556,
+  "displayName" : "Haart, Boxmeer, Land van Cuijk, Noord-Brabant, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "haarzuilens",
   "name" : "Haarzuilens",
@@ -11433,27 +11433,27 @@
 }, {
   "id" : "halfweg-beemster",
   "name" : "Halfweg (Beemster)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Holland",
+  "lat" : 52.526667,
+  "lng" : 4.929167,
+  "displayName" : "Halfweg, Beemster, Purmerend, Noord-Holland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "halfweg-emmen",
   "name" : "Halfweg (Emmen)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Drenthe",
+  "lat" : 52.764596,
+  "lng" : 6.960356,
+  "displayName" : "Halfweg, Emmen, Drenthe, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "halfweg-haarlemmerliede-en-spaarnwoude",
   "name" : "Halfweg (Haarlemmerliede en Spaarnwoude)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Holland",
+  "lat" : 52.382778,
+  "lng" : 4.755,
+  "displayName" : "Halfweg, Haarlemmerliede en Spaarnwoude, Haarlemmermeer, Noord-Holland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "halfweg-lisse",
   "name" : "Halfweg (Lisse)",
@@ -11465,11 +11465,11 @@
 }, {
   "id" : "halfweg-noordwijkerhout",
   "name" : "Halfweg (Noordwijkerhout)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Zuid-Holland",
+  "lat" : 52.278772,
+  "lng" : 4.534420,
+  "displayName" : "Halfweg, Noordwijkerhout, Zuid-Holland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "halfweg-staphorst",
   "name" : "Halfweg (Staphorst)",
@@ -11673,11 +11673,11 @@
 }, {
   "id" : "harenermolen",
   "name" : "Harenermolen",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.149167,
+  "lng" : 6.624722,
+  "displayName" : "Harenermolen, Groningen, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "harfsen",
   "name" : "Harfsen",
@@ -11729,11 +11729,11 @@
 }, {
   "id" : "harlingen",
   "name" : "Harlingen",
-  "province" : null,
+  "province" : "Fryslân",
   "lat" : 53.1752103,
   "lng" : 5.4141998,
   "displayName" : "Harlingen, Fryslân, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "harmelen",
   "name" : "Harmelen",
@@ -12129,19 +12129,19 @@
 }, {
   "id" : "heide-boekel",
   "name" : "Heide (Boekel)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Brabant",
+  "lat" : 51.604392,
+  "lng" : 5.672813,
+  "displayName" : "Heide, Boekel, Noord-Brabant, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "heide-boxmeer",
   "name" : "Heide (Boxmeer)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Brabant",
+  "lat" : 51.644233,
+  "lng" : 5.911087,
+  "displayName" : "Heide, Boxmeer, Noord-Brabant, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "heide-haelen",
   "name" : "Heide (Haelen)",
@@ -12149,15 +12149,15 @@
   "lat" : 51.2461515,
   "lng" : 5.9383796,
   "displayName" : "Heideweg, Haelen, Leudal, Limburg, Nederland, 6081 NS, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "heide-helden",
   "name" : "Heide (Helden)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Limburg",
+  "lat" : 51.348270,
+  "lng" : 6.007643,
+  "displayName" : "Heide, Helden, Limburg, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "heide-heumen",
   "name" : "Heide (Heumen)",
@@ -12185,11 +12185,11 @@
 }, {
   "id" : "heide-scharsterland",
   "name" : "Heide (Scharsterland)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Fryslân",
+  "lat" : 52.966667,
+  "lng" : 5.783333,
+  "displayName" : "Heide, Scharsterland, Fryslân, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "heide-susteren",
   "name" : "Heide (Susteren)",
@@ -12311,13 +12311,13 @@
   "displayName" : "Heistraat, Oosteind, Oosterhout, Noord-Brabant, Nederland, 4909 BE, Nederland",
   "confidence" : "low"
 }, {
-  "id" : "heistraat-buurtschap-in-eindhoven",
-  "name" : "Heistraat (buurtschap in Eindhoven)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "id" : "heistraat-eindhoven",
+  "name" : "Heistraat (Eindhoven)",
+  "province" : "Noord-Brabant",
+  "lat" : 51.436111,
+  "lng" : 5.4125,
+  "displayName" : "Heistraat, Eindhoven, Veldhoven, Noord-Brabant, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "hekelingen",
   "name" : "Hekelingen",
