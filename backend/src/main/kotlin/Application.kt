@@ -13,6 +13,7 @@ import io.ktor.server.routing.*
 import io.ktor.http.*
 import io.ktor.server.http.content.staticFiles
 import java.io.File
+import kotlin.math.roundToInt
 
 /**
  * Backend for the Netherlands places quiz.
@@ -147,7 +148,7 @@ fun Application.module(repository: PlaceRepository) {
 				ClickGuessResponse(
 					placeId = place.id,
 					correctName = place.name,
-					distanceKm = Math.round(distance * 10) / 10.0,
+					distanceKm = (distance * 10).roundToInt() / 10.0,
 					score = score,
 					correctLat = place.lat,
 					correctLng = place.lng,
