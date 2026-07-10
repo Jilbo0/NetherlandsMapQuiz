@@ -1973,7 +1973,7 @@
   "lat" : 52.291892,
   "lng" : 6.203456,
   "displayName" : "Averlo en Frieswijk, Deventer, Overijssel, Nederland",
-  "confidence" : "missing"
+  "confidence" : "ok"
 }, {
   "id" : "avest",
   "name" : "Avest",
@@ -21385,11 +21385,11 @@
 }, {
   "id" : "poppekerke",
   "name" : "Poppekerke",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Zeeland",
+  "lat" : 51.536944,
+  "lng" : 3.459444,
+  "displayName" : "Poppekerke, Zeeland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "poppingawier",
   "name" : "Poppingawier",
@@ -22049,18 +22049,10 @@
 }, {
   "id" : "rimburg",
   "name" : "Rimburg",
-  "province" : null,
+  "province" : "Limburg",
   "lat" : 50.9157315,
   "lng" : 6.0844052,
   "displayName" : "Rimburg, Landgraaf, Limburg, Nederland, 6374 LR, Nederland",
-  "confidence" : "low"
-}, {
-  "id" : "rincon",
-  "name" : "Rincon",
-  "province" : null,
-  "lat" : 12.2386709,
-  "lng" : -68.329816,
-  "displayName" : "Rincon, Bonaire, Nederland",
   "confidence" : "low"
 }, {
   "id" : "rinnegom",
@@ -22073,11 +22065,11 @@
 }, {
   "id" : "rinsumageest",
   "name" : "Rinsumageest",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Fryslân",
+  "lat" : 53.296667,
+  "lng" : 5.9475,
+  "displayName" : "Rinsumageest, Dantumadeel, Fryslân, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "ritthem",
   "name" : "Ritthem",
@@ -22281,11 +22273,11 @@
 }, {
   "id" : "rotterdam-albrands",
   "name" : "Rotterdam Albrands",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Zuid-Holland",
+  "lat" : 51.869722,
+  "lng" : 4.418889,
+  "displayName" : "Rotterdam Albrands, Albrandswaard, Zuid-Holland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "rottevalle",
   "name" : "Rottevalle",
@@ -22577,11 +22569,11 @@
 }, {
   "id" : "schagerwaard",
   "name" : "Schagerwaard",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Holland",
+  "lat" : 52.755890,
+  "lng" : 4.798282,
+  "displayName" : "Schagerwaard, Schagen, Noord-Holland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "schaijk",
   "name" : "Schaijk",
@@ -23209,11 +23201,11 @@
 }, {
   "id" : "siegerswoude-tietjerksteradeel",
   "name" : "Siegerswoude (Tietjerksteradeel)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Fryslân",
+  "lat" : 53.150639,
+  "lng" : 5.973278,
+  "displayName" : "Siegerswoude, Tietjerksteradeel, Fryslân, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "sijbekarspel",
   "name" : "Sijbekarspel",
@@ -23233,11 +23225,11 @@
 }, {
   "id" : "sijbrandahuis",
   "name" : "Sijbrandahuis",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Fryslân",
+  "lat" : 53.310833,
+  "lng" : 5.936944,
+  "displayName" : "Sijbrandahuis, Dantumadeel, Fryslân, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "silvolde",
   "name" : "Silvolde",
@@ -23390,14 +23382,6 @@
   "lng" : 3.6039692,
   "displayName" : "Sint Laurens, Middelburg, Zeeland, Nederland",
   "confidence" : "ok"
-}, {
-  "id" : "sint-maarten",
-  "name" : "Sint Maarten",
-  "province" : null,
-  "lat" : 18.0423736,
-  "lng" : -63.0549948,
-  "displayName" : "Sint Maarten, Nederland",
-  "confidence" : "low"
 }, {
   "id" : "sint-maartensbrug",
   "name" : "Sint Maartensbrug",
@@ -23801,19 +23785,19 @@
 }, {
   "id" : "spijk-delfzijl",
   "name" : "Spijk (Delfzijl)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.389722,
+  "lng" : 6.836389,
+  "displayName" : "Spijk, Delfzijl, Eemsdelta, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "spijk-rijnwaarden",
   "name" : "Spijk (Rijnwaarden)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Gelderland",
+  "lat" : 51.849444,
+  "lng" : 6.1525,
+  "displayName" : "Spijk, Rijnwaarden, Zevenaar, Gelderland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "spijk-west-betuwe",
   "name" : "Spijk (West Betuwe)",
@@ -23878,14 +23862,6 @@
   "lng" : 4.889683,
   "displayName" : "Spui, Centrum, Amsterdam, Noord-Holland, Nederland, 1012 XA, Nederland",
   "confidence" : "ok"
-}, {
-  "id" : "st-johns",
-  "name" : "St. Johns",
-  "province" : null,
-  "lat" : 12.1453554,
-  "lng" : -68.9316716,
-  "displayName" : "Sint Johnsweg, Buena Vista, Curaçao, 0000 CW, Nederland",
-  "confidence" : "low"
 }, {
   "id" : "st-willebrord",
   "name" : "St. Willebrord",
@@ -24193,11 +24169,11 @@
 }, {
   "id" : "stolpervlotbrug",
   "name" : "Stolpervlotbrug",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Noord-Holland",
+  "lat" : 52.807222,
+  "lng" : 4.743611,
+  "displayName" : "Stolpervlotbrug, Schagen, Noord-Holland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "stolwijk",
   "name" : "Stolwijk",
@@ -24313,11 +24289,11 @@
 }, {
   "id" : "stroobos-groningen",
   "name" : "Stroobos (Groningen)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Groningen",
+  "lat" : 53.235094,
+  "lng" : 6.209772,
+  "displayName" : "Stroobos, Groningen, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "strucht",
   "name" : "Strucht",
@@ -24849,19 +24825,19 @@
 }, {
   "id" : "tienhoven-vianen",
   "name" : "Tienhoven (Vianen)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Utrecht",
+  "lat" : 51.96,
+  "lng" : 5.141389,
+  "displayName" : "Tienhoven, Vianen, Vijfheerenlanden, Utrecht, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "tienhoven-zederik",
   "name" : "Tienhoven (Zederik)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Utrecht",
+  "lat" : 51.96,
+  "lng" : 4.943333,
+  "displayName" : "Tienhoven, Zederik, Vijfheerenlanden, Utrecht, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "tienray",
   "name" : "Tienray",
@@ -24950,14 +24926,6 @@
   "lng" : 4.7937432,
   "displayName" : "Tjallewal, Schagen, Noord-Holland, Nederland, 1742 NR, Nederland",
   "confidence" : "ok"
-}, {
-  "id" : "tjarnsweer",
-  "name" : "Tjarnsweer",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
 }, {
   "id" : "tjerkgaast",
   "name" : "Tjerkgaast",
@@ -25153,11 +25121,11 @@
 }, {
   "id" : "tuindorp-rijnwaarden",
   "name" : "Tuindorp (Rijnwaarden)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Gelderland",
+  "lat" : 51.854167,
+  "lng" : 6.093889,
+  "displayName" : "Tuindorp, Rijnwaarden, Zevenaar, Gelderland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "tuitjenhorn",
   "name" : "Tuitjenhorn",
@@ -25329,11 +25297,11 @@
 }, {
   "id" : "uitdam",
   "name" : "Uitdam",
-  "province" : null,
+  "province" : "Noord-Holland",
   "lat" : 52.4195869,
   "lng" : 5.0707855,
   "displayName" : "Uitdam, Waterland, Noord-Holland, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "uitgeest",
   "name" : "Uitgeest",
@@ -26521,19 +26489,19 @@
 }, {
   "id" : "waaxens-dongeradeel",
   "name" : "Waaxens (Dongeradeel)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Fryslân",
+  "lat" : 53.356389,
+  "lng" : 5.919444,
+  "displayName" : "Waaxens, Dongeradeel, Noardeast-Fryslân, Fryslân, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "waaxens-littenseradeel",
   "name" : "Waaxens (Littenseradeel)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Fryslân",
+  "lat" : 53.109167,
+  "lng" : 5.538056,
+  "displayName" : "Waaxens, Littenseradeel, Súdwest-Fryslân, Fryslân, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "wachtum",
   "name" : "Wachtum",
@@ -27079,14 +27047,6 @@
   "displayName" : "Wemeldinge, Kapelle, Zeeland, Nederland",
   "confidence" : "ok"
 }, {
-  "id" : "wengelo",
-  "name" : "Wengelo",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
-}, {
   "id" : "wenum-wiesel",
   "name" : "Wenum-Wiesel",
   "province" : "Gelderland",
@@ -27169,11 +27129,11 @@
 }, {
   "id" : "west-terschelling",
   "name" : "West-Terschelling",
-  "province" : null,
+  "province" : "Fryslân",
   "lat" : 53.3613027,
   "lng" : 5.2160421,
   "displayName" : "West-Terschelling, Terschelling, Fryslân, Nederland",
-  "confidence" : "low"
+  "confidence" : "ok"
 }, {
   "id" : "westbeemster",
   "name" : "Westbeemster",
@@ -27401,19 +27361,19 @@
 }, {
   "id" : "westhoek-het-bildt",
   "name" : "Westhoek (Het Bildt)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Fryslân",
+  "lat" : 53.274528,
+  "lng" : 5.565556,
+  "displayName" : "Westhoek, Het Bildt, Waadhoeke, Fryslân, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "westhoek-walcheren",
   "name" : "Westhoek (Walcheren)",
-  "province" : null,
-  "lat" : 0.0,
-  "lng" : 0.0,
-  "displayName" : "",
-  "confidence" : "missing"
+  "province" : "Zeeland",
+  "lat" : 51.52125,
+  "lng" : 3.582344,
+  "displayName" : "Westhoek, Walcheren, Zeeland, Nederland",
+  "confidence" : "ok"
 }, {
   "id" : "westkapelle",
   "name" : "Westkapelle",
