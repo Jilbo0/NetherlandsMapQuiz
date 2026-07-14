@@ -209,5 +209,16 @@ fun Application.module(repository: PlaceRepository) {
 				)
 			)
 		}
+
+		// Read-only coordinate lookup for the "Show on map" feature in the places list.
+		// Intentionally returns full place data including coordinates — this endpoint
+		// is for the study/reference list, not the quiz, so revealing coordinates is fine.
+		get("/place/{id}") {
+			val id = call.parameters["id"]
+				?: return@get call.respond(HttpStatusCode.BadRequest, mapOf("error" to "Missing id"))
+			val place = repository.byId(id)
+				?: return@get call.respond(HttpStatusCode.NotFound, mapOf("error" to "Unknown place id"))
+			call.respond(place)
+		}
 	}
 }

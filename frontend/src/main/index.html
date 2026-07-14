@@ -98,7 +98,7 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 1fr 320px;
+      grid-template-columns: 1fr 360px;
       gap: 20px;
     }
 
@@ -158,28 +158,6 @@
       margin: 6px 0 0;
       font-size: 13px;
       color: var(--ink-soft);
-    }
-
-    .name-input-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .name-input-row input {
-      flex: 1;
-      font-size: 16px;
-      padding: 10px 12px;
-      border: 1.5px solid var(--ink);
-      border-radius: 6px;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: var(--font-body);
-    }
-
-    .name-input-row input:focus {
-      outline: 2px solid var(--accent);
-      outline-offset: 1px;
     }
 
     button.primary {
@@ -286,6 +264,85 @@
 
     #status-banner.show { display: block; }
 
+    /* ---- Places list panel ---- */
+    .places-search-input {
+      width: 100%;
+      font-size: 14px;
+      padding: 8px 10px;
+      border: 1.5px solid var(--ink);
+      border-radius: 6px;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-body);
+      margin-bottom: 10px;
+    }
+
+    .places-search-input:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    .places-list {
+      max-height: 340px;
+      overflow-y: auto;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+    }
+
+    .places-list-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .places-list-item:last-child { border-bottom: none; }
+
+    .places-list-item:hover { background: var(--paper-deep); }
+
+    .places-list-item .place-name {
+      flex: 1;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .places-list-item .place-province {
+      font-size: 12px;
+      color: var(--ink-soft);
+      flex-shrink: 0;
+      max-width: 100px;
+      text-align: right;
+    }
+
+    .places-list-item button {
+      border: 1px solid var(--ink);
+      background: transparent;
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-family: var(--font-body);
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .places-list-item button:hover {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .places-list-empty {
+      padding: 16px 10px;
+      text-align: center;
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+
     /* Province mode: label that follows the cursor while it's over the map,
        Seterra-style — shows the place name the user needs to locate. */
     #cursor-label {
@@ -341,7 +398,6 @@
     <h1>Plaatsen<span class="sub">Dutch places trainer</span></h1>
     <div class="mode-switch">
       <button id="mode-click" class="active">Click the map</button>
-      <button id="mode-name">Name the place</button>
       <button id="mode-province">Province practice</button>
     </div>
   </header>
@@ -359,12 +415,6 @@
         <p class="eyebrow" id="prompt-eyebrow">Find this place</p>
         <p class="prompt-name" id="prompt-name">Loading…</p>
         <p class="prompt-province" id="prompt-province"></p>
-
-        <!-- Name mode input (hidden in click mode) -->
-        <div class="name-input-row" id="name-input-row" style="display:none">
-          <input type="text" id="name-input" placeholder="Type the place name…" autocomplete="off" />
-          <button class="primary" id="submit-name">Check</button>
-        </div>
 
         <div class="feedback" id="feedback"></div>
         <div class="province-feedback-banner" id="province-feedback"></div>
@@ -412,6 +462,14 @@
           </div>
         </div>
       </div>
+
+      <div class="panel-card" id="places-list-card">
+        <p class="eyebrow">All places</p>
+        <input class="places-search-input" id="places-search" type="text" placeholder="Search place…" autocomplete="off" />
+        <div class="places-list" id="places-list">
+          <div class="places-list-empty">Loading…</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -423,10 +481,9 @@
   const API_BASE = "http://localhost:8080";
 
   // ---- State ----
-  let mode = "click"; // "click", "name", or "province"
+  let mode = "click"; // "click" or "province"
   let allPlaces = [];          // [{id, name, province}] for click mode
   let currentPlace = null;     // place object currently being asked about (click mode)
-  let currentTarget = null;    // {placeId, lat, lng, province} for name mode
   let guessMarker = null;
   let answerMarker = null;
   let answerLine = null;
@@ -598,29 +655,35 @@
 
   // ---- Mode switching ----
   document.getElementById('mode-click').addEventListener('click', () => setMode('click'));
-  document.getElementById('mode-name').addEventListener('click', () => setMode('name'));
   document.getElementById('mode-province').addEventListener('click', () => setMode('province'));
 
   function setMode(newMode) {
+    // --- Tear down province mode state before switching away ---
+    // Without this, province colors/feedback/buttons bleed into other modes.
+    if (mode === 'province') {
+      resetProvinceLayerStyles();
+      provinceRevealed = false;
+      provinceRevealedCorrectName = null;
+      provinceWrongNames = new Set();
+      provinceWrongTries = 0;
+      isProcessingGuess = false;
+      document.getElementById('province-feedback').classList.remove('show', 'correct', 'wrong', 'reveal');
+      document.getElementById('province-next-btn').style.display = 'none';
+    }
+
     mode = newMode;
     document.getElementById('mode-click').classList.toggle('active', mode === 'click');
-    document.getElementById('mode-name').classList.toggle('active', mode === 'name');
     document.getElementById('mode-province').classList.toggle('active', mode === 'province');
-    document.getElementById('name-input-row').style.display = mode === 'name' ? 'flex' : 'none';
 
-    // Province mode replaces the side-panel prompt entirely (the place name follows
-    // the cursor on the map instead), and uses its own stats card.
+    // Province mode uses its own stats card; click mode uses the score-based one.
     document.getElementById('prompt-card').style.display = mode === 'province' ? 'none' : 'block';
     document.getElementById('stats-card').style.display = mode === 'province' ? 'none' : 'block';
     document.getElementById('province-stats-card').style.display = mode === 'province' ? 'block' : 'none';
-    document.getElementById('cursor-label').style.display = 'none'; // reset; shown on mousemove in province mode
+    document.getElementById('cursor-label').style.display = 'none';
 
     if (mode === 'click') {
       document.getElementById('hint-text').textContent = 'Click anywhere on the map where you think this place is.';
       document.getElementById('prompt-eyebrow').textContent = 'Find this place';
-    } else if (mode === 'name') {
-      document.getElementById('hint-text').textContent = 'A marker is shown on the map. Type the name of that place.';
-      document.getElementById('prompt-eyebrow').textContent = 'What place is this?';
     }
 
     nextRound();
@@ -631,9 +694,6 @@
     clearMapMarkers();
     document.getElementById('feedback').classList.remove('show', 'correct', 'close', 'wrong');
     document.getElementById('next-btn').style.display = 'none';
-    document.getElementById('name-input').value = '';
-    document.getElementById('name-input').disabled = false;
-    document.getElementById('submit-name').disabled = false;
     roundActive = true;
 
     if (mode === 'click') {
@@ -641,26 +701,7 @@
       if (allPlaces.length === 0) return;
       currentPlace = allPlaces[Math.floor(Math.random() * allPlaces.length)];
       document.getElementById('prompt-name').textContent = currentPlace.name;
-      // Province intentionally hidden here — showing it would hint at where to click.
       document.getElementById('prompt-province').textContent = '';
-    } else if (mode === 'name') {
-      try {
-        const res = await fetch(`${API_BASE}/round/name-target`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        currentTarget = await res.json();
-        hideStatus();
-        document.getElementById('prompt-name').textContent = '?';
-        document.getElementById('prompt-province').textContent = currentTarget.province || '';
-        const marker = L.circleMarker([currentTarget.lat, currentTarget.lng], {
-          radius: 9, color: '#2B3A4A', weight: 2, fillColor: '#C1572D', fillOpacity: 0.9
-        }).addTo(map);
-        answerMarker = marker;
-        map.setView([currentTarget.lat, currentTarget.lng], 8);
-        document.getElementById('name-input').focus();
-      } catch (e) {
-        showStatus(`Could not reach the backend at ${API_BASE}. Make sure it's running, then try again.`);
-        console.error(e);
-      }
     } else if (mode === 'province') {
       await nextProvinceRound();
     }
@@ -888,63 +929,6 @@
     cursorLabel.style.display = 'none';
   });
 
-  // ---- Name mode: handle submit ----
-  document.getElementById('submit-name').addEventListener('click', submitNameGuess);
-  document.getElementById('name-input').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') submitNameGuess();
-  });
-
-  async function submitNameGuess() {
-    if (mode !== 'name' || !roundActive || !currentTarget) return;
-    const guess = document.getElementById('name-input').value.trim();
-    if (!guess) return;
-    roundActive = false;
-    document.getElementById('name-input').disabled = true;
-    document.getElementById('submit-name').disabled = true;
-
-    try {
-      const res = await fetch(`${API_BASE}/guess/name`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ placeId: currentTarget.placeId, guessName: guess })
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const result = await res.json();
-
-      document.getElementById('prompt-name').textContent = result.correctName;
-
-      const el = document.getElementById('feedback');
-      el.classList.remove('correct', 'close', 'wrong');
-      let score, cls, message;
-      if (result.isCorrect) {
-        score = 1000; cls = 'correct'; message = 'Correct!';
-      } else if (result.isClose) {
-        score = 500; cls = 'close'; message = `Close — you wrote "${guess}", the answer was "${result.correctName}".`;
-      } else {
-        score = 0; cls = 'wrong'; message = `Not quite — the answer was "${result.correctName}".`;
-      }
-      el.classList.add(cls, 'show');
-      el.innerHTML = `
-        <div class="score-row">
-          <span class="big">${score}</span>
-          <span class="label">points</span>
-        </div>
-        <div>${message}</div>
-      `;
-
-      sessionRounds++;
-      sessionScore += score;
-      updateStats();
-      document.getElementById('next-btn').style.display = 'inline-block';
-    } catch (err) {
-      showStatus(`Could not reach the backend at ${API_BASE}. Make sure it's running, then try again.`);
-      console.error(err);
-      roundActive = true;
-      document.getElementById('name-input').disabled = false;
-      document.getElementById('submit-name').disabled = false;
-    }
-  }
-
   function updateStats() {
     document.getElementById('stat-rounds').textContent = sessionRounds;
     document.getElementById('stat-score').textContent = sessionScore;
@@ -955,9 +939,77 @@
 
   document.getElementById('next-btn').addEventListener('click', nextRound);
 
+  // ---- Places list ----
+  let locatorMarker = null; // the "Show on map" marker — only one at a time
+
+  function renderPlacesList(filter) {
+    const container = document.getElementById('places-list');
+    const query = (filter || '').toLowerCase().trim();
+    const filtered = query
+      ? allPlaces.filter(p => p.name.toLowerCase().includes(query))
+      : allPlaces;
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<div class="places-list-empty">No places found.</div>';
+      return;
+    }
+
+    // Cap rendering at 200 rows for performance — with 3600+ places,
+    // rendering everything at once makes the DOM sluggish.
+    const toRender = filtered.slice(0, 200);
+    const fragment = document.createDocumentFragment();
+    for (const place of toRender) {
+      const row = document.createElement('div');
+      row.className = 'places-list-item';
+      row.innerHTML = `
+        <span class="place-name">${place.name}</span>
+        <span class="place-province">${place.province || '—'}</span>
+        <button data-id="${place.id}">Show</button>
+      `;
+      row.querySelector('button').addEventListener('click', () => showPlaceOnMap(place));
+      fragment.appendChild(row);
+    }
+    if (filtered.length > 200) {
+      const note = document.createElement('div');
+      note.className = 'places-list-empty';
+      note.textContent = `Showing 200 of ${filtered.length} results — type more to narrow down.`;
+      fragment.appendChild(note);
+    }
+    container.innerHTML = '';
+    container.appendChild(fragment);
+  }
+
+  function showPlaceOnMap(place) {
+    // Fetch the coordinates for this place from the backend.
+    // We use /round/name-target's sibling concept — but since we removed that endpoint
+    // from the UI, we need another way. The locator calls a dedicated endpoint.
+    // For now: look up coordinates via the click-guess flow — but actually,
+    // we need a read-only coordinate lookup. Let's use /place/:id.
+    fetch(`${API_BASE}/place/${place.id}`)
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(data => {
+        if (locatorMarker) map.removeLayer(locatorMarker);
+        locatorMarker = L.circleMarker([data.lat, data.lng], {
+          radius: 8, color: '#2B3A4A', weight: 2, fillColor: '#C1572D', fillOpacity: 0.9
+        }).bindPopup(`<strong>${place.name}</strong><br>${place.province || ''}`, { closeButton: false })
+          .addTo(map)
+          .openPopup();
+        map.setView([data.lat, data.lng], 9);
+      })
+      .catch(err => {
+        showStatus(`Could not load location for ${place.name}.`);
+        console.error(err);
+      });
+  }
+
+  document.getElementById('places-search').addEventListener('input', (e) => {
+    renderPlacesList(e.target.value);
+  });
+
   // ---- Boot ----
   (async function init() {
     await loadPlaces();
+    renderPlacesList('');
     await nextRound();
   })();
 </script>
