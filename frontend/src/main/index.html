@@ -64,7 +64,7 @@ button.primary:disabled{opacity:.4;cursor:default}
 .places-search-bar input{flex:1;font-size:14px;padding:8px 10px;border:1.5px solid var(--ink);border-radius:6px;background:var(--paper);color:var(--ink);font-family:var(--font-body)}
 .places-search-bar input:focus{outline:2px solid var(--accent);outline-offset:1px}
 .places-count{font-size:12px;color:var(--ink-soft);white-space:nowrap}
-.places-list{flex:1;overflow-y:auto;max-height:640px}
+.places-list{flex:1;overflow-y:auto;min-height:0;max-height: 640px;position:relative}
 .letter-group-header{position:sticky;top:0;background:var(--paper-deep);padding:5px 16px 3px;font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--ink);border-bottom:1px solid var(--line);z-index:10}
 .places-list-item{display:flex;align-items:center;gap:8px;padding:6px 16px;border-bottom:1px solid rgba(201,191,164,.4);font-size:13px}
 .places-list-item:last-child{border-bottom:none}
@@ -289,6 +289,9 @@ function setMode(newMode){
   const isQuiz=mode==='click'||mode==='province';
   document.getElementById('quiz-view').style.display=isQuiz?'block':'none';
   document.getElementById('places-view').style.display=mode==='list'?'block':'none';
+  if(mode==='list'){
+    updateAlphaHighlight(document.getElementById('places-list'), document.getElementById('alpha-sidebar'));
+  }
   document.getElementById('prompt-card').style.display=mode==='province'?'none':'block';
   document.getElementById('stats-card').style.display=mode==='province'?'none':'block';
   document.getElementById('province-stats-card').style.display=mode==='province'?'block':'none';
@@ -437,7 +440,28 @@ function updateStats(){
 document.getElementById('next-btn').addEventListener('click',nextRound);
 
 // ---- Places list ----
-let alphaObserver=null;
+let currentHighlight=null;
+let isJumping = false;
+
+function updateAlphaHighlight(container, sidebar){
+  const headers=[...container.querySelectorAll('[data-letter-anchor]')];
+  const containerTop=container.getBoundingClientRect().top;
+
+  let current=headers[0]||null;
+  for(const h of headers){
+    if(h.getBoundingClientRect().top-containerTop<=4){
+      current=h;
+    } else {
+      break;
+    }
+  }
+
+  const l=current?current.dataset.letterAnchor:null;
+  if(currentHighlight)currentHighlight.classList.remove('active');
+  const btn=l?sidebar.querySelector(`[data-letter="${l}"]`):null;
+  if(btn){btn.classList.add('active');currentHighlight=btn}
+}
+
 function renderPlacesList(filter){
   const container=document.getElementById('places-list');
   const countEl=document.getElementById('places-count');
@@ -452,17 +476,40 @@ function renderPlacesList(filter){
 
   const sidebar=document.getElementById('alpha-sidebar');
   sidebar.innerHTML='';
+
   for(const l of letters){
     const btn=document.createElement('div');
     btn.className='alpha-letter';btn.textContent=l;btn.dataset.letter=l;
-    btn.addEventListener('click',()=>{
-      const a=container.querySelector(`[data-letter-anchor="${l}"]`);
-      if(a)a.scrollIntoView({behavior:'smooth',block:'start'});
+    btn.addEventListener('click', () => {
+      // 1. Find the FIRST item in the group, not the header.
+      // The header is at the top of the group; finding the first item
+      // gives us a stable coordinate that isn't currently 'stuck'.
+      const header = container.querySelector(`[data-letter-anchor="${l}"]`);
+      const firstItem = header ? header.nextElementSibling : null;
+
+      if (!firstItem) return;
+
+      isJumping = true;
+
+      // 2. Scroll to the item's position minus a small buffer for the header height.
+      // This ensures the header sits perfectly at the top.
+      const headerHeight = header.offsetHeight;
+      const target = firstItem.offsetTop - headerHeight;
+
+      container.scrollTo({
+        top: target,
+        behavior: 'auto'
+      });
+
+      // 3. Update UI
+      if (currentHighlight) currentHighlight.classList.remove('active');
+      btn.classList.add('active');
+      currentHighlight = btn;
+
+      setTimeout(() => { isJumping = false; }, 100);
     });
     sidebar.appendChild(btn);
   }
-
-  if(alphaObserver)alphaObserver.disconnect();
 
   const frag=document.createDocumentFragment();
   for(const l of letters){
@@ -478,18 +525,20 @@ function renderPlacesList(filter){
   }
   container.innerHTML='';container.appendChild(frag);
 
-  let currentHighlight=null;
-  alphaObserver=new IntersectionObserver((entries)=>{
-    for(const e of entries){
-      if(e.isIntersecting){
-        const l=e.target.dataset.letterAnchor;if(!l)continue;
-        if(currentHighlight)currentHighlight.classList.remove('active');
-        const btn=sidebar.querySelector(`[data-letter="${l}"]`);
-        if(btn){btn.classList.add('active');currentHighlight=btn}
-      }
+  let ticking=false;
+  container.onscroll = () => {
+    if (isJumping) return; // Ignore scroll updates while we are jumping
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        updateAlphaHighlight(container, sidebar);
+        ticking = false;
+      });
+      ticking = true;
     }
-  },{root:container,threshold:0,rootMargin:'0px 0px -90% 0px'});
-  container.querySelectorAll('[data-letter-anchor]').forEach(el=>alphaObserver.observe(el));
+  };
+
+  currentHighlight=null;
+  updateAlphaHighlight(container,sidebar); // set initial state
 }
 
 document.getElementById('places-search').addEventListener('input',(e)=>renderPlacesList(e.target.value));
@@ -502,13 +551,17 @@ function showLocator(place){
   if(!locatorMap){
     locatorMap=L.map('locator-map',{center:[52.2,5.4],zoom:8,zoomControl:true,attributionControl:false});
     L.geoJSON(NL_OUTLINE,{style:{fillColor:'#6B9E73',fillOpacity:1,color:'#3F5C45',weight:1.5}}).addTo(locatorMap);
+    L.geoJSON(NL_PROVINCES,{style:{fillOpacity:0,color:'#3F5C45',weight:1,dashArray:'4,4'}}).addTo(locatorMap);
   }
   fetch(`${API_BASE}/place/${place.id}`)
     .then(r=>r.ok?r.json():Promise.reject(r.status))
     .then(data=>{
       if(locatorMarker)locatorMap.removeLayer(locatorMarker);
       locatorMarker=L.circleMarker([data.lat,data.lng],{radius:8,color:'#2B3A4A',weight:2,fillColor:'#C1572D',fillOpacity:.9}).addTo(locatorMap);
-      locatorMap.setView([data.lat,data.lng],10);
+      setTimeout(()=>{
+        locatorMap.invalidateSize();
+        locatorMap.setView([data.lat,data.lng],7);
+      },100);
       setTimeout(()=>locatorMap.invalidateSize(),100);
     })
     .catch(err=>{showStatus(`Could not load location for ${place.name}.`);console.error(err)});
